@@ -201,7 +201,7 @@ const VERIFY_AN_OBJECTS_CONSTRUCTOR_WITH_INSTANCE_OF = () => {
   let myHouse = new House(4);
   console.log(myHouse instanceof House);
 };
-VERIFY_AN_OBJECTS_CONSTRUCTOR_WITH_INSTANCE_OF();
+// VERIFY_AN_OBJECTS_CONSTRUCTOR_WITH_INSTANCE_OF();
 
 const UNDERSTAND_OWN_PROPERTIES = () => {
   function Bird(name) {
@@ -221,4 +221,122 @@ const UNDERSTAND_OWN_PROPERTIES = () => {
   }
   console.log(ownProps);
 };
-UNDERSTAND_OWN_PROPERTIES();
+// UNDERSTAND_OWN_PROPERTIES();
+
+const USE_PROTOTYPE_PROPERTIES_TO_REDUCE_DUPLICATE_CODE = () => {
+  // Since numLegs will prob ahve the same valuee for all instances of Bird, there will be a duplicated numLegs var inside each instance of Bird
+  // A better way is to use the prototype of Bird. Properties in prototype are shared among ALL instances of Bird. COde below is how to add numLegs to the Bird prototype
+  function Dog(name) {
+    this.name = name;
+  }
+  Dog.prototype.numLegs = 3;
+
+  // Only change code above this line
+  let beagle = new Dog("Snoopy");
+  console.log(beagle);
+  console.log(beagle.numLegs); // since all instances have the properties on the prototype, a prototype can be thought as a "recipe" for creating objects
+};
+// USE_PROTOTYPE_PROPERTIES_TO_REDUCE_DUPLICATE_CODE();
+
+const ITERATE_OVER_ALL_PROPERTIES = () => {
+  // so far have seen 2 kinds of properties
+  // - Own properties =  defined directly on the object instance itself
+  // - Prototype properties = deefined on the prototype
+
+  const EX = () => {
+    class Bird {
+      constructor(name) {
+        this.someName = name; // Own property
+      }
+    }
+    Bird.prototype.numLegs = 2; // prototype property
+
+    let duck = new Bird("Donald");
+
+    // code below is how you would add own properties to an array and prototype properties to a different array
+    let ownProps = [];
+    let prototypeProps = [];
+
+    for (let property in duck) {
+      if (duck.hasOwnProperty(property)) {
+        ownProps.push(property);
+      } else {
+        prototypeProps.push(property);
+      }
+    }
+    console.log(ownProps);
+    console.log(prototypeProps);
+
+    const ACTUAL_EXAMPLE = () => {
+      function Dog(name) {
+        this.name = name;
+      }
+
+      Dog.prototype.numLegs = 4;
+
+      let beagle = new Dog("Snoopy");
+
+      let ownProps = [];
+      let prototypeProps = [];
+
+      // Only change code below this line
+
+      for (let property in beagle) {
+        if (beagle.hasOwnProperty(property)) {
+          ownProps.push(property);
+        } else {
+          prototypeProps.push(property);
+        }
+      }
+      console.log(ownProps);
+      console.log(prototypeProps);
+    };
+
+    ACTUAL_EXAMPLE();
+  };
+  EX();
+};
+// ITERATE_OVER_ALL_PROPERTIES();
+
+const UNDERSTAND_THE_CONSTRUCTOR_PROPERTY = () => {
+  // There is a special CONSTRUCTOR prop located on the object instances DUCK and BEAGLE that were created in the previous challenges
+  // Note that the constructor prop is a refeerence to the constructor func that created the instance. The advantage of the constructor prop is that it's possible to check for this prop to find out what kind of object it is.
+
+  // Write a joinDogFraternity function thaat takes a candidate param
+  // using the constructor prop, return true if the candidate is a Dog, otherwise return false
+  function Dog(name) {
+    this.name = name;
+  }
+
+  // Only change code below this line
+  function joinDogFraternity(candidate) {
+    if (candidate.constructor === Dog) {
+      return true;
+    }
+    return false;
+  }
+  // the codee above passes the freeCodeCamp challenege
+};
+// UNDERSTAND_THE_CONSTRUCTOR_PROPERTY();
+
+const CHANGE_THE_PROTOTYPE_TO_A_NEW_OBJECT = () => {
+  // so far we've beeen adding props to the prototype individually
+  // A more efficient way is to set the prototype toa new objecet that already contains the properties.
+  // This way, the props are added all at once
+  function Dog(name) {
+    this.name = name;
+  }
+
+  Dog.prototype = {
+    // Only change code below this line
+    numLegs: 2,
+    eat: () => {
+      console.log("yahher");
+    },
+    describe: () => {
+      console.log(`My name is ${this.name}`);
+    },
+  };
+  // this will pass the challenge
+};
+CHANGE_THE_PROTOTYPE_TO_A_NEW_OBJECT();
