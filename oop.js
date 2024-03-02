@@ -264,8 +264,8 @@ const ITERATE_OVER_ALL_PROPERTIES = () => {
         prototypeProps.push(property);
       }
     }
-    console.log(ownProps);
-    console.log(prototypeProps);
+    // console.log(ownProps);
+    // console.log(prototypeProps);
 
     const ACTUAL_EXAMPLE = () => {
       function Dog(name) {
@@ -288,8 +288,10 @@ const ITERATE_OVER_ALL_PROPERTIES = () => {
           prototypeProps.push(property);
         }
       }
-      console.log(ownProps);
-      console.log(prototypeProps);
+      console.log(`this is OwnProps arr. ownProps = [${ownProps}]`);
+      console.log(
+        `this is the prototypesProps arr. prototypeProp = [${prototypeProps}]`
+      );
     };
 
     ACTUAL_EXAMPLE();
@@ -339,4 +341,227 @@ const CHANGE_THE_PROTOTYPE_TO_A_NEW_OBJECT = () => {
   };
   // this will pass the challenge
 };
-CHANGE_THE_PROTOTYPE_TO_A_NEW_OBJECT();
+// CHANGE_THE_PROTOTYPE_TO_A_NEW_OBJECT();
+
+const REMEMBER_TO_SET_THE_CONSTRUCTOR_PROP_WHEN_CHANGING_THE_PROTOTYPE = () => {
+  // big side effect of manually setting the prototype to a new object
+  // - it ERASES the constructor property!
+  // - the fix is to MANUALLY DEFINE the CONSTRUCTOR property
+  //
+  //
+  //
+  //
+  function Dog(name) {
+    this.name = name;
+  }
+  // Only change code below this line
+  Dog.prototype = {
+    constructor: Dog, // without this line, the console log would return false
+    numLegs: 4,
+    eat: function () {
+      console.log("nom nom nom");
+    },
+    describe: function () {
+      console.log("My name is " + this.name);
+    },
+  };
+
+  let buggle = new Dog("James");
+
+  console.log(buggle.constructor === Dog);
+};
+// REMEMBER_TO_SET_THE_CONSTRUCTOR_PROP_WHEN_CHANGING_THE_PROTOTYPE();
+
+const UNDERSTAND_WHERE_AN_OBJECTS_PROTOTYPE_COMES_FROM = () => {
+  // Just like how children inherit genes from parents, objects inherit prototype from the constructor func
+  const EX = () => {
+    class Bird {
+      constructor(name) {
+        this.name = name;
+      }
+    }
+    let duck = new Bird("Donald");
+    console.log(duck);
+    console.log(Bird.prototype.isPrototypeOf(duck)); // will return true
+  };
+  EX();
+
+  function Dog(name) {
+    this.name = name;
+  }
+
+  let beagle = new Dog("Snoopy");
+  console.log(Dog.prototype.isPrototypeOf(beagle)); // will return true
+  // Only change code below this line
+};
+// UNDERSTAND_WHERE_AN_OBJECTS_PROTOTYPE_COMES_FROM();
+
+const UNDERSTAND_THE_PROTOTYPE_CHAIN = () => {
+  // all objects in javascript (some exceptions) have a prototype.
+  // also, an objets prototype IS also an object
+  // Because prototype is an object, prototype can also have it's own prototype
+  function Dog(name) {
+    this.name = name;
+  }
+
+  let beagle = new Dog("Snoopy");
+
+  Dog.prototype.isPrototypeOf(beagle); // yields true
+
+  // Fix the code below so that it evaluates to true
+  Object.prototype.isPrototypeOf(Dog.prototype); // Object is a SUPERTYPE to both Dog and beagle
+};
+// UNDERSTAND_THE_PROTOTYPE_CHAIN();
+
+const USE_INHERITANCE_SO_YOU_DONT_REPEAT_YOURSELF = () => {
+  // REMEMBER: Don't Repeat Yourself (DRY)
+  // notice in the example below, that the "describe" method is hsared by Bird and Dog
+
+  const EX = () => {
+    Bird.prototype = {
+      constructor: Bird,
+      describe: function () {
+        console.log("My name is " + this.name);
+      },
+    };
+
+    Dog.prototype = {
+      constructor: Dog,
+      describe: function () {
+        console.log("My name is " + this.name);
+      },
+    };
+  };
+  EX();
+  // The describe method is repeated in two places. The code can be edited to follow the DRY principle by creating a supertype (or parent) called ANIMAL
+
+  const DRY_PRINCIPLE = () => {
+    function Animal() {}
+
+    Animal.prototype = {
+      constructor: Animal,
+      describe: function () {
+        console.log("My name is " + this.name);
+      },
+    };
+    //since Animal inclues the describe method, you can remove it from Bird and Dog
+    Bird.prototype = {
+      constructor: Bird,
+    };
+
+    Dog.prototype = {
+      constructor: Dog,
+    };
+  };
+  DRY_PRINCIPLE();
+
+  const ACTUAL_EXAMPLE = () => {
+    function Cat(name) {
+      this.name = name;
+    }
+
+    Cat.prototype = {
+      constructor: Cat,
+    };
+
+    function Bear(name) {
+      this.name = name;
+    }
+
+    Bear.prototype = {
+      constructor: Bear,
+    };
+
+    function Animal() {}
+
+    Animal.prototype = {
+      constructor: Animal,
+      eat: function () {
+        console.log("nom nom nom");
+      },
+    };
+  };
+  ACTUAL_EXAMPLE(); // this code inside ACTUAL_EXAMPLE passes the challenge
+};
+// USE_INHERITANCE_SO_YOU_DONT_REPEAT_YOURSELF();
+
+const INHERIT_BEHAVIOURS_FROM_A_SUPERTYPE = () => {
+  // In the previous challenge, I created a supertype called Animal that defined behaviours shared by all animals
+  // Inheritance is utilized for reusing methods of Animal insde Bird and Dog without defining them again.
+  // this challenge covers the first step
+  // 1. make an instance of the supertype(parent)
+  //
+  /* let animal = Object.create(Animal.prototype) */
+  //
+  // This syntax above creates a new object. It sets "obj" in this case (Animal.prototype) as the new object's prototype. Recall the prototype is like the "recipe" fro creating an object. By setting the prototype of animal to be the prototype of "Animal", you are effectively giving the animal instances the same "recipe" as any other isntances of "Animal"
+  //
+  //
+  //
+  // Use Object.create to make two instances of Animal named "duck" and "beagle"
+
+  function Animal() {}
+
+  Animal.prototype = {
+    constructor: Animal,
+    eat: function () {
+      console.log("nom nom nom");
+    },
+  };
+
+  // Only change code below this line
+
+  let duck = Object.create(Animal.prototype); // Change this line
+  let beagle = Object.create(Animal.prototype); // Change this line
+
+  //the code above passes the challenge
+
+  console.log(duck, beagle); // just here to not throw error
+};
+// INHERIT_BEHAVIOURS_FROM_A_SUPERTYPE();
+
+const SET_THE_CHILDS_PROTOTYPE_TO_AN_INSTANCE_OF_THE_PARENT = () => {
+  // In the previous challenege you sas the first step for inheriting behaviour from the supertype(parent) "Animal": which was maaking a new instance of Animal
+  // This challenge covers the next step, setting the prototype of the subtype(child) in this case "Bird" to be an instance of Animal
+  //
+  //
+  //
+  /* Modify the code so that instances of Dog inherit from Animal */
+  //
+  //
+  //
+  function Animal() {}
+
+  Animal.prototype = {
+    constructor: Animal,
+    eat: function () {
+      console.log("nom nom nom");
+    },
+  };
+
+  function Dog() {}
+
+  // Only change code below this line
+  Dog.prototype = Object.create(Animal.prototype);
+
+  let beagle = new Dog();
+};
+// SET_THE_CHILDS_PROTOTYPE_TO_AN_INSTANCE_OF_THE_PARENT();
+
+const RESET_AN_INHERITED_CONSTRUCTOR_PROP = () => {
+  // When an object inherts its prototype fromm another object, it also inherts the supertype's constructor property
+  // need to manually set the constructor prop of the instance to the instance object
+  function Animal() {}
+  function Bird() {}
+  function Dog() {}
+
+  Bird.prototype = Object.create(Animal.prototype);
+  Dog.prototype = Object.create(Animal.prototype);
+
+  // Only change code below this line
+  Bird.prototype.constructor = Bird;
+  Dog.prototype.constructor = Dog;
+
+  let duck = new Bird();
+  let beagle = new Dog();
+};
+RESET_AN_INHERITED_CONSTRUCTOR_PROP();
