@@ -550,6 +550,14 @@ const SET_THE_CHILDS_PROTOTYPE_TO_AN_INSTANCE_OF_THE_PARENT = () => {
 const RESET_AN_INHERITED_CONSTRUCTOR_PROP = () => {
   // When an object inherts its prototype fromm another object, it also inherts the supertype's constructor property
   // need to manually set the constructor prop of the instance to the instance object
+
+  Animal.prototype = {
+    constructor: Animal,
+    eat: function () {
+      console.log("nom nom nom");
+    },
+  };
+  /*****/
   function Animal() {}
   function Bird() {}
   function Dog() {}
@@ -563,5 +571,23 @@ const RESET_AN_INHERITED_CONSTRUCTOR_PROP = () => {
 
   let duck = new Bird();
   let beagle = new Dog();
+  duck.eat();
+  beagle.eat();
 };
 RESET_AN_INHERITED_CONSTRUCTOR_PROP();
+
+const ADD_METHODS_AFTER_INHERITANCE = () => {
+  // A constructor func that inherits its prototype object from a supertype constructor func can still have it's OWN methods in additon to inherited methods
+  // For example, Bird is a constructor that inherits its prototype from Animal
+  const EX_1 = () => {
+    function Animal() {}
+    Animal.prototype.eat = function () {
+      console.log("yaehf");
+    };
+    function Bird() {}
+    Bird.prototype = Object.create(Animal.prototype);
+    Bird.prototype.construtor = Bird;
+  };
+  EX_1();
+};
+// ADD_METHODS_AFTER_INHERITANCE();
