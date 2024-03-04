@@ -574,20 +574,113 @@ const RESET_AN_INHERITED_CONSTRUCTOR_PROP = () => {
   duck.eat();
   beagle.eat();
 };
-RESET_AN_INHERITED_CONSTRUCTOR_PROP();
+// RESET_AN_INHERITED_CONSTRUCTOR_PROP();
 
 const ADD_METHODS_AFTER_INHERITANCE = () => {
   // A constructor func that inherits its prototype object from a supertype constructor func can still have it's OWN methods in additon to inherited methods
   // For example, Bird is a constructor that inherits its prototype from Animal
-  const EX_1 = () => {
+
+  function Animal() {}
+  Animal.prototype.eat = function () {
+    console.log("yaehf");
+  };
+  function Bird() {}
+  Bird.prototype = Object.create(Animal.prototype);
+  Bird.prototype.construtor = Bird;
+
+  // IN addition to what is inherited by Animal(), I'm also going to add a behaviour that is unique to Bird objects.
+  // Bird will be getting a fly() function.
+  // NOTE: functions added to a bird's prototype is thee same way as any constuctor func
+  Bird.prototype.fly = function () {
+    console.log("i'm flyingd");
+  };
+  // Now instances of Bird will have both eat() and fly() methods
+  let duck = new Bird();
+  duck.eat();
+  duck.fly();
+
+  /********/
+
+  // Add all necessary code so the Dog object inherits from Animal and the Dog's prototype constructor is set to Dog
+  // THen add a bark() method to the DOg objecet so that beagle can eat() and bark().
+  // bark() method shoudl print Woof! to the console
+  const ACTUAL_EXAMPLE = () => {
     function Animal() {}
     Animal.prototype.eat = function () {
-      console.log("yaehf");
+      console.log("nom nom nom");
     };
-    function Bird() {}
-    Bird.prototype = Object.create(Animal.prototype);
-    Bird.prototype.construtor = Bird;
+
+    function Dog() {}
+
+    // Only change code below this line
+    Dog.prototype = Object.create(Animal.prototype);
+    Dog.prototype.constructor = Dog;
+    Dog.prototype.bark = function () {
+      console.log("Woof!");
+    };
+
+    // Only change code above this line
+
+    let beagle = new Dog();
+    beagle.eat();
+    beagle.bark();
   };
-  EX_1();
+  ACTUAL_EXAMPLE();
 };
 // ADD_METHODS_AFTER_INHERITANCE();
+
+const OVERRIDE_INHERITED_METHODS = () => {
+  // IN the previous lessons, I learned that an objeect can inherit its behaviour from another object by referencing its prototype object
+  /* ChildObject.prototype = Object.create(ParentObject.prototype) */
+  // Then the ChildObject recieved its own methods by chaining them onto its prototype:
+  /* ChildObject.prototype.methodName = function() {...} */
+
+  /*
+  It's possible to override an inherited method. it's done the same way by adding a method to ChildObject.prototype using the same method as the one to override. 
+
+  Below is an example of overriding thee eat() method inherited from Animal
+  */
+
+  const EX = () => {
+    function Animal() {}
+    Animal.prototype.eat = function () {
+      return "nom nom nom";
+    };
+    function Bird() {}
+
+    Bird.prototype = Object.create(Animal.prototype);
+
+    Bird.prototype.eat = function () {
+      return "peck peck peck";
+    };
+
+    EX();
+  };
+  /*****/
+  // Override the fly() method for Penguin so that is returns the string "Alas, this is a flightless bird."
+  function Bird() {}
+
+  Bird.prototype.fly = function () {
+    return "I am flying!";
+  };
+
+  function Penguin() {}
+  Penguin.prototype = Object.create(Bird.prototype);
+  Penguin.prototype.constructor = Penguin;
+
+  // Only change code below this line
+  Penguin.prototype.fly = function () {
+    return "Alas, this is a flightless bird.";
+  };
+
+  // Only change code above this line
+
+  let penguin = new Penguin();
+  console.log(penguin.fly());
+};
+// OVERRIDE_INHERITED_METHODS();
+
+const USE_A_MIXIN_COMMON_BEHAVIOUR_BETWEEN_UNRELATED_OBJECTS = () => {
+  //
+};
+USE_A_MIXIN_COMMON_BEHAVIOUR_BETWEEN_UNRELATED_OBJECTS();
