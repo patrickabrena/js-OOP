@@ -807,5 +807,55 @@ const USE_AN_IIFE_TO_CREATE_A_MODULE = () => {
       };
     }
   })();
+  // We can group these mixins into a module as follows using IIFE:
+  const EXAMPLE_IIFE = (() => {
+    let motionModule = (function () {
+      return {
+        glideMixin: function (obj) {
+          obj.glide = function () {
+            console.log("Gliding on the water");
+          };
+        },
+        flyMixin: function (obj) {
+          obj.fly = function () {
+            console.log("Flying, wooosh!");
+          };
+        },
+      };
+    })();
+  })();
+  // Creeate a module named funModule to wrap the two mixins "isCUteMixin" and "singMixin"
+  const ACTUAL_EXAMPLE = (() => {
+    //SETUP
+    /*
+    let isCuteMixin = function(obj) {
+  obj.isCute = function() {
+    return true;
+  };
+};
+let singMixin = function(obj) {
+  obj.sing = function() {
+    console.log("Singing to an awesome tune");
+  };
+};
+    */
+    //
+    //
+    //
+    let funModule = (function () {
+      return {
+        isCuteMixin: function (obj) {
+          obj.isCute = function () {
+            return true;
+          };
+        },
+        singMixin: function (obj) {
+          obj.sing = function () {
+            console.log("Singing to an awesome tune");
+          };
+        },
+      };
+    })(); // this IIFE module passes the final challenge
+  })();
 };
 USE_AN_IIFE_TO_CREATE_A_MODULE();
