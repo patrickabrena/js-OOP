@@ -681,6 +681,131 @@ const OVERRIDE_INHERITED_METHODS = () => {
 // OVERRIDE_INHERITED_METHODS();
 
 const USE_A_MIXIN_COMMON_BEHAVIOUR_BETWEEN_UNRELATED_OBJECTS = () => {
-  //
+  //There are some cases where inheritance isn't the best solution
+  // inheritance doesn't work well for unrelated objects like Bird and Airplane.
+  // They can both fly but a bird is not a type of airplane
+  // For unrelated objects it's better to use "mixins"
+  // Mixin allows other objets to use a collection of functions
+
+  const EXAMPLE_MIXINS = () => {
+    let flyMixin = function (obj) {
+      obj.fly = function () {
+        console.log("Flying, wooosh!");
+      };
+    };
+    //The flyMixin takes an object and gives it the fly moethod
+    let bird = {
+      name: "Donald",
+      numLegs: 2,
+    };
+
+    let plane = {
+      model: "777",
+      numPassengers: 524,
+    };
+
+    flyMixin(bird);
+    flyMixin(plane);
+    // Here bird anad plane area PASSED into the flyMixin which assigns the fly function to each project
+    // now bird and plane can both fly
+    bird.fly();
+    plane.fly();
+  };
+  EXAMPLE_MIXINS();
+
+  /*******/
+  // create a mixin glideMixin that defines a method named glide. THen use glideMixin to give both bird and plane the ability to glide
+  let bird = {
+    name: "Donald",
+    numLegs: 2,
+  };
+
+  let boat = {
+    name: "Warrior",
+    type: "race-boat",
+  };
+
+  // Only change code below this line
+  const glideMixin = (obj) => {
+    obj.glide = () => {
+      console.log(`${typeof obj} has the ability to glide`);
+    };
+  };
+  glideMixin(bird);
+  glideMixin(boat);
+  bird.glide();
+  boat.glide();
 };
-USE_A_MIXIN_COMMON_BEHAVIOUR_BETWEEN_UNRELATED_OBJECTS();
+// USE_A_MIXIN_COMMON_BEHAVIOUR_BETWEEN_UNRELATED_OBJECTS();
+
+const USE_CLOSURE_TO_PROTECT_PROPERTIES_WITHIN_AN_OBJECT_FROM_BEING_MODIFIED_EXTERNALLY =
+  () => {
+    // In the previous challenge, bird had aa public prop name. It is considered public because it can be accessed and changed outside of bird's definition
+    // eg . bird.name = "Duffy";
+
+    //Because "name" is a public property of bird, any part of my code can eaasily change the name of bird to any value.
+    //This is an issue because think of paasswords and bank accounts
+
+    // thee simplest way to make this public proerty private is by creating a variable WITHIN the constructor function. This changes the scope of that variable to be within the constructor function versus available globally.
+    const EX = () => {
+      //
+      function Bird() {
+        let hatchedEgg = 10;
+
+        this.getHatchedEggCount = function () {
+          return hatchedEgg;
+        };
+      }
+      let ducky = new Bird();
+      let ans = ducky.getHatchedEggCount();
+      console.log(ans);
+    };
+    EX();
+    // Here getHatchedEggCount is a privileged method, because it has acess to the private variable "hatchedEgg".
+    // Possible beceause hatchedEgg is delcared in the same context as getHatchedEggCount. In Javscript, aa function always has access to the context in which it was created.
+    // This is called CLOSURE
+
+    /******/
+
+    //Change how weight is delcareed in the Bird function so it is a private variable. Then, create a method "getWeight" that returns the value of weight 15.
+    function Bird() {
+      let weight = 15;
+
+      this.getWeight = () => {
+        return weight;
+      };
+    }
+    let penguin = new Bird();
+    let ans = penguin.getWeight();
+    console.log(ans);
+  };
+// USE_CLOSURE_TO_PROTECT_PROPERTIES_WITHIN_AN_OBJECT_FROM_BEING_MODIFIED_EXTERNALLY();
+
+const UNDERSTAND_THE_IMMEDIATELY_INVOKED_FUNCTION_EXPRESSION = () => {
+  // a common pattern in Javascript is to exectute a function as soon as it is delcared
+  // IIFE is the term for this
+
+  (function () {
+    console.log("A cozy nest is ready");
+  })();
+};
+// UNDERSTAND_THE_IMMEDIATELY_INVOKED_FUNCTION_EXPRESSION();
+
+const USE_AN_IIFE_TO_CREATE_A_MODULE = () => {
+  // an IIFE is often used to group related functionality into a single object or MODULE.
+  // eeg. an earlier challenege difined two mixins:
+
+  const EXAMPLE_MIXINS = (() => {
+    function glideMixin(obj) {
+      obj.glide = function () {
+        console.log("Gliding on the water");
+      };
+    }
+    function flyMixin(obj) {
+      obj.fly = function () {
+        console.log("FLying, woosh!");
+      };
+    }
+  })();
+};
+USE_AN_IIFE_TO_CREATE_A_MODULE();
